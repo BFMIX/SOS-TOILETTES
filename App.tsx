@@ -90,12 +90,12 @@ export default function App() {
             <Ionicons
               name={activeTab === "map" ? "map" : "map-outline"}
               size={24}
-              color={activeTab === "map" ? "#007AFF" : "#8E8E93"}
+              color={activeTab === "map" ? "#13e5ec" : "#8E8E93"}
             />
             <Text
               style={[
                 styles.tabText,
-                { color: activeTab === "map" ? "#007AFF" : "#8E8E93" },
+                { color: activeTab === "map" ? "#13e5ec" : "#8E8E93" },
               ]}
             >
               Carte
@@ -109,12 +109,12 @@ export default function App() {
             <Ionicons
               name={activeTab === "favorites" ? "heart" : "heart-outline"}
               size={24}
-              color={activeTab === "favorites" ? "#007AFF" : "#8E8E93"}
+              color={activeTab === "favorites" ? "#13e5ec" : "#8E8E93"}
             />
             <Text
               style={[
                 styles.tabText,
-                { color: activeTab === "favorites" ? "#007AFF" : "#8E8E93" },
+                { color: activeTab === "favorites" ? "#13e5ec" : "#8E8E93" },
               ]}
             >
               Favoris
@@ -128,12 +128,12 @@ export default function App() {
             <Ionicons
               name={activeTab === "settings" ? "person" : "person-outline"}
               size={24}
-              color={activeTab === "settings" ? "#007AFF" : "#8E8E93"}
+              color={activeTab === "settings" ? "#13e5ec" : "#8E8E93"}
             />
             <Text
               style={[
                 styles.tabText,
-                { color: activeTab === "settings" ? "#007AFF" : "#8E8E93" },
+                { color: activeTab === "settings" ? "#13e5ec" : "#8E8E93" },
               ]}
             >
               Profil
