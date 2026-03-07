@@ -172,9 +172,7 @@ export const fetchAllToilets = async (
     // Si Firebase est configuré et l'utilisateur est authentifié, on merge avec les signalements
     if (db && auth?.currentUser) {
       try {
-        const overridesQuery = await getDocs(
-          collection(db, "Toilets_Overrides"),
-        );
+        const overridesQuery = await getDocs(collection(db, "toilets"));
         const overrides = new Map();
         overridesQuery.forEach((doc) => {
           overrides.set(doc.id, doc.data());
@@ -185,10 +183,17 @@ export const fetchAllToilets = async (
             const overrideData = overrides.get(toilet.id);
             return {
               ...toilet,
-              status: overrideData.status || toilet.status,
+              communityStatus: overrideData.communityStatus,
               negativeReportsCount: overrideData.negativeReportsCount || 0,
+              lastReportAt: overrideData.lastReportAt
+                ? typeof overrideData.lastReportAt.toMillis === "function"
+                  ? overrideData.lastReportAt.toMillis()
+                  : overrideData.lastReportAt
+                : undefined,
               lastUpdate: overrideData.lastUpdate
-                ? overrideData.lastUpdate.toMillis()
+                ? typeof overrideData.lastUpdate.toMillis === "function"
+                  ? overrideData.lastUpdate.toMillis()
+                  : overrideData.lastUpdate
                 : toilet.lastUpdate,
             };
           }
@@ -199,7 +204,6 @@ export const fetchAllToilets = async (
           "Firestore Overrides error (check rules):",
           firestoreError,
         );
-        // En cas d'erreur Firestore on retourne quand même les toilettes de base
         return nearbyToilets;
       }
     }

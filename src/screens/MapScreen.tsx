@@ -18,6 +18,7 @@ import { Toilet } from "../models/types";
 import ToiletDetailsSheet from "../components/Shared/ToiletDetailsSheet";
 import FloatingActionButtons from "../components/Map/FloatingActionButtons";
 import SearchBar from "../components/Map/SearchBar";
+import NearbyDropdown from "../components/Map/NearbyDropdown";
 import { useStore } from "../store/useStore";
 
 export default function MapScreen() {
@@ -41,6 +42,7 @@ export default function MapScreen() {
   const [showAll, setShowAll] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [currentZoomDelta, setCurrentZoomDelta] = useState<number>(0);
 
   // Initialization
   useEffect(() => {
@@ -108,6 +110,23 @@ export default function MapScreen() {
     return true;
   });
 
+  const isZoomedOut = currentZoomDelta > 0.04;
+
+  const getMarkerColor = (t: Toilet) => {
+    // 2 negative reports in 48h drops it to out of order
+    const isCommunityClosed =
+      t.communityStatus === "hors_service" || t.negativeReportsCount >= 2;
+    if (
+      isCommunityClosed ||
+      t.status === "out_of_order" ||
+      t.status === "closed"
+    )
+      return "#FF3B30"; // Red
+    if (t.source === "ratp") return "#AF52DE"; // Purple
+    if (t.isPaid) return "#FF9500"; // Orange
+    return "#34C759"; // Green
+  };
+
   return (
     <View style={styles.container}>
       <SearchBar
@@ -115,6 +134,20 @@ export default function MapScreen() {
         onSearch={setSearchQuery}
         onFilterChange={setActiveFilters}
       />
+
+      <NearbyDropdown
+        toilets={displayedToilets}
+        isDark={isDark}
+        onSelectToilet={handleMarkerPress}
+      />
+
+      {isZoomedOut && (
+        <View style={styles.zoomWarning}>
+          <Text style={styles.zoomWarningText}>
+            Zommez pour voir les sanisettes
+          </Text>
+        </View>
+      )}
 
       <MapView
         ref={mapRef}
@@ -127,34 +160,38 @@ export default function MapScreen() {
           altitude: 10000,
           zoom: 13,
         }}
+        onRegionChangeComplete={(region) => {
+          setCurrentZoomDelta(region.latitudeDelta);
+        }}
         customMapStyle={isDark ? CustomMapStyleDark : CustomMapStyleLight}
         showsUserLocation
         showsMyLocationButton={false}
         showsCompass={false}
       >
-        {displayedToilets.map((toilet) => (
-          <Marker
-            key={toilet.id}
-            coordinate={toilet.location}
-            onPress={() => handleMarkerPress(toilet)}
-            tracksViewChanges={true}
-            anchor={{ x: 0.5, y: 0.5 }}
-          >
-            <View style={styles.markerContainer}>
-              <Image
-                source={require("../../assets/paris_sanisette.png")}
-                style={styles.markerImage}
-                resizeMode="contain"
-              />
-              {toilet.status === "out_of_order" && (
-                <View style={[styles.halo, { backgroundColor: "#FF3B30" }]} />
-              )}
-              {toilet.status === "open" && toilet.isPaid && (
-                <View style={[styles.halo, { backgroundColor: "#FF9500" }]} />
-              )}
-            </View>
-          </Marker>
-        ))}
+        {!isZoomedOut &&
+          displayedToilets.map((toilet) => (
+            <Marker
+              key={toilet.id}
+              coordinate={toilet.location}
+              onPress={() => handleMarkerPress(toilet)}
+              tracksViewChanges={true}
+              anchor={{ x: 0.5, y: 0.5 }}
+            >
+              <View style={styles.markerContainer}>
+                <Image
+                  source={require("../../assets/Toilette_generic.png")}
+                  style={styles.markerImage}
+                  resizeMode="contain"
+                />
+                <View
+                  style={[
+                    styles.halo,
+                    { backgroundColor: getMarkerColor(toilet) },
+                  ]}
+                />
+              </View>
+            </Marker>
+          ))}
       </MapView>
 
       <FloatingActionButtons
@@ -180,7 +217,7 @@ export default function MapScreen() {
         <View
           style={[
             styles.sheetContainer,
-            { backgroundColor: isDark ? "#1C1C1E" : "#FFFFFF" },
+            { backgroundColor: isDark ? "#0f172a" : "#FFFFFF" },
           ]}
         >
           <View style={styles.dragIndicator} />
@@ -194,9 +231,29 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#000" },
   map: { width: "100%", height: "100%" },
+  zoomWarning: {
+    position: "absolute",
+    top: Platform.OS === "ios" ? 140 : 120, // below search bar
+    alignSelf: "center",
+    backgroundColor: "rgba(15, 23, 42, 0.9)",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 9999,
+    zIndex: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  zoomWarningText: {
+    color: "#fff",
+    fontFamily: "Plus Jakarta Sans",
+    fontWeight: "600",
+    fontSize: 13,
+  },
   loadingContainer: {
     position: "absolute",
-    top: Platform.OS === "ios" ? 60 : 40,
+    top: Platform.OS === "ios" ? 120 : 100,
     alignSelf: "center",
     backgroundColor: "rgba(255,255,255,0.9)",
     padding: 10,
@@ -209,19 +266,20 @@ const styles = StyleSheet.create({
   markerContainer: {
     alignItems: "center",
     justifyContent: "center",
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
   },
   markerImage: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
   },
   halo: {
     position: "absolute",
-    bottom: 5,
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    bottom: 0,
+    right: 0,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
     borderWidth: 2,
     borderColor: "#FFF",
     shadowColor: "#000",
@@ -233,18 +291,19 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   sheetContainer: {
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
     paddingTop: 10,
     paddingBottom: Platform.OS === "ios" ? 40 : 20,
     minHeight: Dimensions.get("window").height * 0.4,
   },
   dragIndicator: {
-    width: 40,
-    height: 5,
+    width: 48,
+    height: 6,
     borderRadius: 3,
-    backgroundColor: "#ccc",
+    backgroundColor: "#cbd5e1", // slate-300
     alignSelf: "center",
     marginBottom: 10,
+    marginTop: 4,
   },
 });

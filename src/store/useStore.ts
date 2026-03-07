@@ -41,8 +41,11 @@ export const useStore = create<AppState>((set, get) => ({
     set((state) => {
       const newUser = state.user ? { ...state.user, ...profile } : null;
       if (newUser && profile.xp !== undefined) {
-        // Simple leveling system: 50 XP per level
-        newUser.level = Math.floor(newUser.xp / 50) + 1;
+        // Gamification logic
+        if (newUser.xp < 20) newUser.level = "Vessie Timide";
+        else if (newUser.xp < 50) newUser.level = "Explorateur";
+        else if (newUser.xp < 100) newUser.level = "Le Toiletteur";
+        else newUser.level = "Expert Sanisette";
       }
       return { user: newUser };
     }),
@@ -73,11 +76,22 @@ export const useStore = create<AppState>((set, get) => ({
     }
 
     try {
-      const { doc, setDoc } = await import("firebase/firestore");
-      const userRef = doc(db, "Users", user.uid);
-      await setDoc(userRef, { favorites }, { merge: true });
+      const { doc, setDoc, arrayUnion } = await import("firebase/firestore");
+      const userRef = doc(db, "users", user.uid);
+
+      const updates: any = { favorites };
+      const currentBadges = user.badges || [];
+
+      if (favorites.length >= 3 && !currentBadges.includes("Le Toiletteur")) {
+        updates.badges = arrayUnion("Le Toiletteur");
+        currentBadges.push("Le Toiletteur");
+      }
+
+      await setDoc(userRef, updates, { merge: true });
       set((state) => ({
-        user: state.user ? { ...state.user, favorites } : null,
+        user: state.user
+          ? { ...state.user, favorites, badges: currentBadges }
+          : null,
       }));
     } catch (error) {
       console.error("Error toggling favorite:", error);

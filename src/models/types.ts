@@ -22,7 +22,9 @@ export interface Toilet {
 
   // État temps réel & Communauté
   status: ToiletStatus;
+  communityStatus?: "hors_service" | "open" | "unknown"; // Peut override le statut API
   negativeReportsCount: number; // Si >= 2 en 48h -> passe out_of_order
+  lastReportAt?: Date | number;
   lastUpdate: Date | number; // Timestamp de la dernière validation/mise à jour API
 
   // Évaluations
@@ -31,19 +33,29 @@ export interface Toilet {
 
 export interface UserProfile {
   uid: string; // Firebase Anonymous Auth UID
-  firstName?: string;
+  pseudo?: string;
   profileImage?: string;
   xp: number;
-  level: number; // Gamification (ex: 1 = Débutant, 5 = Guide Expert)
+  level: string; // Gamification (ex: "Vessie Timide", "Explorateur", "Le Toiletteur")
+  badges: string[];
   favorites: string[]; // Liste des IDs de toilettes favorites
   reportsMade: number;
+  createdAt?: Date | number;
 }
 
 export interface Report {
-  id: string;
+  id?: string;
   toiletId: string;
   userId: string;
-  type: "dirty" | "broken" | "closed" | "fake";
-  comment: string | null;
+  type: "broken" | "dirty" | "closed" | "fake";
+  createdAt: Date | number;
+}
+
+export interface Review {
+  id?: string;
+  toiletId: string;
+  userId: string;
+  pseudo: string;
+  comment: string;
   createdAt: Date | number;
 }

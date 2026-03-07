@@ -116,7 +116,7 @@ export default function SettingsScreen() {
     <ScrollView
       style={[
         styles.container,
-        { backgroundColor: isDark ? "#000" : "#F5F5FA" },
+        { backgroundColor: isDark ? "#102122" : "#f6f8f8" },
       ]}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
@@ -127,106 +127,94 @@ export default function SettingsScreen() {
         onSelect={onSelectAvatar}
       />
 
-      <Text style={[styles.header, { color: isDark ? "#FFF" : "#1A1A2E" }]}>
+      <Text style={[styles.header, { color: isDark ? "#f1f5f9" : "#0f172a" }]}>
         Profil
       </Text>
 
-      {/* Profile Card */}
+      {/* Super Profile Card */}
       <View
         style={[
-          styles.profileCard,
-          { backgroundColor: isDark ? "#1C1C1E" : "#FFF" },
+          styles.superProfileCard,
+          { backgroundColor: isDark ? "#0f172a" : "#FFF" },
         ]}
       >
-        <TouchableOpacity
-          style={styles.avatarContainer}
-          onPress={() => setShowAvatarPicker(true)}
-        >
-          {renderAvatar()}
-          <View style={styles.editBadge}>
-            <Ionicons name="camera" size={14} color="#FFF" />
-          </View>
-        </TouchableOpacity>
-
-        <View style={styles.profileInfo}>
-          {isEditing ? (
-            <View style={styles.editRow}>
-              <TextInput
-                style={[
-                  styles.nameInput,
-                  { color: isDark ? "#FFF" : "#1A1A2E" },
-                ]}
-                value={tempName}
-                onChangeText={setTempName}
-                autoFocus
-                placeholder="Ton prénom"
-                placeholderTextColor="#8E8E93"
-              />
-              <TouchableOpacity onPress={handleSaveName}>
-                <Ionicons name="checkmark-circle" size={28} color={ACCENT} />
-              </TouchableOpacity>
+        <View style={styles.profileHeaderContent}>
+          <TouchableOpacity
+            style={styles.avatarContainer}
+            onPress={() => setShowAvatarPicker(true)}
+          >
+            {renderAvatar()}
+            <View style={styles.editBadge}>
+              <Ionicons name="camera" size={14} color="#FFF" />
             </View>
-          ) : (
-            <TouchableOpacity
-              style={styles.nameRow}
-              onPress={() => setIsEditing(true)}
-            >
-              <Text
-                style={[
-                  styles.nameText,
-                  { color: isDark ? "#FFF" : "#1A1A2E" },
-                ]}
-              >
-                Bonjour, {user?.firstName || "Utilisateur"}
-              </Text>
-              <Ionicons
-                name="pencil"
-                size={14}
-                color={ACCENT}
-                style={{ marginLeft: 8 }}
-              />
-            </TouchableOpacity>
-          )}
-          <Text style={styles.levelText}>
-            Local Guide • Niveau {user?.level || 1}
-          </Text>
-        </View>
-      </View>
+          </TouchableOpacity>
 
-      {/* Stats Row */}
-      <View style={styles.statsRow}>
-        <View
-          style={[
-            styles.statCard,
-            { backgroundColor: isDark ? "#1C1C1E" : "#FFF" },
-          ]}
-        >
-          <Text style={[styles.statNumber, { color: ACCENT }]}>
-            {user?.xp || 0}
-          </Text>
-          <Text style={styles.statLabel}>Points XP</Text>
+          <View style={styles.profileInfo}>
+            {isEditing ? (
+              <View style={styles.editRow}>
+                <TextInput
+                  style={[
+                    styles.nameInput,
+                    { color: isDark ? "#f1f5f9" : "#0f172a" },
+                  ]}
+                  value={tempName}
+                  onChangeText={setTempName}
+                  autoFocus
+                  placeholder="Ton prénom"
+                  placeholderTextColor="#94a3b8"
+                />
+                <TouchableOpacity onPress={handleSaveName}>
+                  <Ionicons name="checkmark-circle" size={28} color={ACCENT} />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity
+                style={styles.nameRow}
+                onPress={() => setIsEditing(true)}
+              >
+                <Text
+                  style={[
+                    styles.nameText,
+                    { color: isDark ? "#f1f5f9" : "#0f172a" },
+                  ]}
+                >
+                  Bonjour, {user?.firstName || "Utilisateur"}
+                </Text>
+                <Ionicons
+                  name="pencil"
+                  size={14}
+                  color={ACCENT}
+                  style={{ marginLeft: 8 }}
+                />
+              </TouchableOpacity>
+            )}
+            <Text style={styles.levelText}>
+              Local Guide • Niveau {user?.level || 1}
+            </Text>
+          </View>
         </View>
-        <View
-          style={[
-            styles.statCard,
-            { backgroundColor: isDark ? "#1C1C1E" : "#FFF" },
-          ]}
-        >
-          <Text style={[styles.statNumber, { color: "#5856D6" }]}>
-            {user?.reportsMade || 0}
-          </Text>
-          <Text style={styles.statLabel}>Signalements</Text>
-        </View>
-        <View
-          style={[
-            styles.statCard,
-            { backgroundColor: isDark ? "#1C1C1E" : "#FFF" },
-          ]}
-        >
-          <Text style={[styles.statNumber, { color: "#FF2D55" }]}>
-            {user?.favorites?.length || 0}
-          </Text>
-          <Text style={styles.statLabel}>Favoris</Text>
+
+        <View style={styles.superStatsSeparator} />
+
+        <View style={styles.superStatsRow}>
+          <View style={styles.superStatItem}>
+            <Text style={[styles.superStatNumber, { color: ACCENT }]}>
+              {user?.xp || 0}
+            </Text>
+            <Text style={styles.superStatLabel}>Points XP</Text>
+          </View>
+          <View style={styles.superStatItem}>
+            <Text style={[styles.superStatNumber, { color: "#5856D6" }]}>
+              {user?.reportsMade || 0}
+            </Text>
+            <Text style={styles.superStatLabel}>Signalements</Text>
+          </View>
+          <View style={styles.superStatItem}>
+            <Text style={[styles.superStatNumber, { color: "#FF2D55" }]}>
+              {user?.favorites?.length || 0}
+            </Text>
+            <Text style={styles.superStatLabel}>Favoris</Text>
+          </View>
         </View>
       </View>
 
@@ -235,7 +223,7 @@ export default function SettingsScreen() {
       <View
         style={[
           styles.section,
-          { backgroundColor: isDark ? "#1C1C1E" : "#FFF" },
+          { backgroundColor: isDark ? "#0f172a" : "#FFF" },
         ]}
       >
         {/* Radius */}
@@ -248,7 +236,7 @@ export default function SettingsScreen() {
               <Text
                 style={[
                   styles.settingText,
-                  { color: isDark ? "#FFF" : "#1A1A2E", marginLeft: 0 },
+                  { color: isDark ? "#f1f5f9" : "#0f172a", marginLeft: 0 },
                 ]}
               >
                 Rayon de recherche
@@ -300,7 +288,7 @@ export default function SettingsScreen() {
             <Text
               style={[
                 styles.settingText,
-                { color: isDark ? "#FFF" : "#1A1A2E" },
+                { color: isDark ? "#f1f5f9" : "#0f172a" },
               ]}
             >
               Mode Global
@@ -324,7 +312,7 @@ export default function SettingsScreen() {
             <Text
               style={[
                 styles.settingText,
-                { color: isDark ? "#FFF" : "#1A1A2E" },
+                { color: isDark ? "#f1f5f9" : "#0f172a" },
               ]}
             >
               Thème
@@ -347,7 +335,7 @@ export default function SettingsScreen() {
             <Text
               style={[
                 styles.settingText,
-                { color: isDark ? "#FFF" : "#1A1A2E" },
+                { color: isDark ? "#f1f5f9" : "#0f172a" },
               ]}
             >
               Notifications
@@ -365,7 +353,7 @@ export default function SettingsScreen() {
       <View
         style={[
           styles.section,
-          { backgroundColor: isDark ? "#1C1C1E" : "#FFF" },
+          { backgroundColor: isDark ? "#0f172a" : "#FFF" },
         ]}
       >
         {[
@@ -378,7 +366,7 @@ export default function SettingsScreen() {
               <Text
                 style={[
                   styles.settingText,
-                  { color: isDark ? "#FFF" : "#1A1A2E", marginLeft: 0 },
+                  { color: isDark ? "#f1f5f9" : "#0f172a", marginLeft: 0 },
                 ]}
               >
                 {source}
@@ -400,50 +388,61 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: {
-    padding: 20,
+    padding: 24,
     paddingTop: Platform.OS === "ios" ? 60 : 40,
     paddingBottom: 100,
   },
   header: {
-    fontSize: 32,
-    fontWeight: "800",
+    fontSize: 28,
+    fontFamily: "Plus Jakarta Sans",
+    fontWeight: "700",
     marginBottom: 20,
     letterSpacing: -0.5,
   },
-  profileCard: {
+  superProfileCard: {
+    padding: 24,
+    borderRadius: 32,
+    marginBottom: 28,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.05)",
+  },
+  profileHeaderContent: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 20,
-    borderRadius: 24,
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
+    marginBottom: 20,
   },
   avatarContainer: { position: "relative" },
   avatar: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: "#E5E5EA",
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: "#e2e8f0",
   },
   editBadge: {
     position: "absolute",
     bottom: 0,
     right: 0,
     backgroundColor: ACCENT,
-    padding: 5,
-    borderRadius: 12,
+    padding: 6,
+    borderRadius: 9999,
     borderWidth: 2,
     borderColor: "#FFF",
   },
   profileInfo: { marginLeft: 16, flex: 1 },
   nameRow: { flexDirection: "row", alignItems: "center" },
-  nameText: { fontSize: 22, fontWeight: "700" },
-  nameInput: {
+  nameText: {
     fontSize: 20,
+    fontFamily: "Plus Jakarta Sans",
+    fontWeight: "700",
+  },
+  nameInput: {
+    fontSize: 18,
+    fontFamily: "Plus Jakarta Sans",
     fontWeight: "600",
     borderBottomWidth: 2,
     borderBottomColor: ACCENT,
@@ -456,35 +455,39 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  levelText: { fontSize: 14, color: "#8E8E93", marginTop: 4 },
-  statsRow: {
+  levelText: {
+    fontSize: 13,
+    fontFamily: "Plus Jakarta Sans",
+    color: "#64748b",
+    marginTop: 4,
+  },
+  superStatsSeparator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: "rgba(148, 163, 184, 0.2)",
+    marginBottom: 20,
+  },
+  superStatsRow: {
     flexDirection: "row",
-    gap: 10,
-    marginBottom: 28,
+    justifyContent: "space-between",
   },
-  statCard: {
-    flex: 1,
+  superStatItem: {
     alignItems: "center",
-    paddingVertical: 18,
-    borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
+    flex: 1,
   },
-  statNumber: {
-    fontSize: 28,
+  superStatNumber: {
+    fontSize: 22,
+    fontFamily: "Plus Jakarta Sans",
     fontWeight: "800",
   },
-  statLabel: {
-    fontSize: 12,
-    color: "#8E8E93",
+  superStatLabel: {
+    fontSize: 11,
+    fontFamily: "Plus Jakarta Sans",
+    color: "#64748b",
     marginTop: 4,
-    fontWeight: "500",
+    fontWeight: "600",
   },
   section: {
-    borderRadius: 20,
+    borderRadius: 24,
     padding: 16,
     marginBottom: 24,
     shadowColor: "#000",
@@ -492,13 +495,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 2,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.05)",
   },
   sectionTitle: {
     fontSize: 13,
-    color: "#8E8E93",
-    marginBottom: 8,
+    fontFamily: "Plus Jakarta Sans",
+    color: "#64748b",
+    marginBottom: 10,
     marginLeft: 4,
-    fontWeight: "600",
+    fontWeight: "700",
     letterSpacing: 0.5,
   },
   settingRow: {
@@ -509,38 +515,53 @@ const styles = StyleSheet.create({
   },
   settingLabel: { flexDirection: "row", alignItems: "center" },
   iconBox: {
-    width: 30,
-    height: 30,
-    borderRadius: 8,
+    width: 32,
+    height: 32,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
   },
-  settingText: { fontSize: 16, marginLeft: 12, fontWeight: "500" },
-  rowRight: { flexDirection: "row", alignItems: "center" },
-  valueText: { fontSize: 14, color: "#8E8E93", marginRight: 6 },
+  settingText: {
+    fontSize: 15,
+    fontFamily: "Plus Jakarta Sans",
+    marginLeft: 12,
+    fontWeight: "600",
+  },
+  rowRight: { flexDirection: "row", alignItems: "center", gap: 6 },
+  valueText: {
+    fontSize: 13,
+    fontFamily: "Plus Jakarta Sans",
+    color: "#64748b",
+  },
   separator: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: "#C6C6C8",
-    marginLeft: 42,
+    backgroundColor: "rgba(0,0,0,0.1)",
+    marginLeft: 44,
   },
   radiusButtons: { flexDirection: "row", gap: 6 },
   radiusBtn: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 12,
-    backgroundColor: "#F2F2F7",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 9999,
+    backgroundColor: "#f1f5f9",
     borderWidth: 1,
-    borderColor: "#E5E5EA",
+    borderColor: "transparent",
   },
   radiusBtnActive: {
-    backgroundColor: ACCENT,
-    borderColor: ACCENT,
+    backgroundColor: "rgba(19, 229, 236, 0.15)",
+    borderColor: "rgba(19, 229, 236, 0.3)",
   },
-  radiusBtnText: { fontSize: 11, fontWeight: "700", color: "#1C1C1E" },
-  radiusBtnTextActive: { color: "#FFF" },
+  radiusBtnText: {
+    fontSize: 12,
+    fontFamily: "Plus Jakarta Sans",
+    fontWeight: "700",
+    color: "#0f172a",
+  },
+  radiusBtnTextActive: { color: ACCENT },
   versionText: {
     textAlign: "center",
-    color: "#8E8E93",
+    color: "#94a3b8",
+    fontFamily: "Plus Jakarta Sans",
     fontSize: 12,
     marginTop: 10,
     marginBottom: 20,

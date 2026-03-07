@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   useColorScheme,
   ScrollView,
+  Image,
 } from "react-native";
 import { Toilet } from "../../models/types";
 import { Ionicons } from "@expo/vector-icons";
@@ -27,6 +28,7 @@ import {
   query,
   orderBy,
   limit,
+  where,
 } from "firebase/firestore";
 import { Alert } from "react-native";
 import { useStore } from "../../store/useStore";
@@ -50,21 +52,19 @@ export default function ToiletDetailsSheet({ toilet }: Props) {
   useEffect(() => {
     if (!db || !auth?.currentUser) return;
 
-    const commentsRef = collection(
-      db,
-      "Toilets_Overrides",
-      toilet.id,
-      "Reports",
+    const commentsRef = collection(db, "reviews");
+    const q = query(
+      commentsRef,
+      where("toiletId", "==", toilet.id),
+      orderBy("createdAt", "desc"),
+      limit(20),
     );
-    const q = query(commentsRef, orderBy("createdAt", "desc"), limit(20));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const list = snapshot.docs
-        .map((d) => ({
-          id: d.id,
-          ...d.data(),
-        }))
-        .filter((c) => (c as any).type === "comment"); // Only show comments here
+      const list = snapshot.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+      }));
 
       setComments(list);
       setIsLoadingComments(false);
@@ -78,23 +78,18 @@ export default function ToiletDetailsSheet({ toilet }: Props) {
     if (!db || !auth?.currentUser) return;
 
     try {
-      const reportsRef = collection(
-        db,
-        "Toilets_Overrides",
-        toilet.id,
-        "Reports",
-      );
-      await addDoc(reportsRef, {
+      const reviewsRef = collection(db, "reviews");
+      await addDoc(reviewsRef, {
+        toiletId: toilet.id,
         userId: auth.currentUser.uid,
-        userName: user?.firstName || "Explorateur",
-        type: "comment",
+        pseudo: user?.pseudo || "Explorateur",
         comment: commentText.trim(),
         createdAt: serverTimestamp(),
       });
 
-      // Bonus XP for comment
-      const userRef = doc(db, "Users", auth.currentUser.uid);
-      await setDoc(userRef, { xp: increment(2) }, { merge: true });
+      // Bonus XP for comment (+5)
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      await setDoc(userRef, { xp: increment(5) }, { merge: true });
 
       setCommentText("");
     } catch (err) {
@@ -103,7 +98,17 @@ export default function ToiletDetailsSheet({ toilet }: Props) {
     }
   };
 
-  const openGPS = () => {
+  const openGPS = async () => {
+    // Add XP for routing (+1 XP)
+    if (db && auth?.currentUser?.uid) {
+      try {
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        await setDoc(userRef, { xp: increment(1) }, { merge: true });
+      } catch (e) {
+        console.warn("GPS XP error", e);
+      }
+    }
+
     const scheme = Platform.OS === "ios" ? "maps:" : "geo:";
     const url =
       scheme +
@@ -130,33 +135,30 @@ export default function ToiletDetailsSheet({ toilet }: Props) {
           style: "destructive",
           onPress: async () => {
             try {
-              const toiletRef = doc(db!, "Toilets_Overrides", toilet.id);
+              const toiletRef = doc(db!, "toilets", toilet.id);
 
               // Increment negative reports on the toilet
               await setDoc(
                 toiletRef,
                 {
                   negativeReportsCount: increment(1),
+                  lastReportAt: serverTimestamp(),
                   lastUpdate: serverTimestamp(),
                 },
                 { merge: true },
               );
 
-              // Add specific report
-              const reportsRef = collection(
-                db!,
-                "Toilets_Overrides",
-                toilet.id,
-                "Reports",
-              );
+              // Add specific report to root collection
+              const reportsRef = collection(db!, "reports");
               await addDoc(reportsRef, {
+                toiletId: toilet.id,
                 userId: auth!.currentUser!.uid,
                 type: "broken",
                 createdAt: serverTimestamp(),
               });
 
               // Increment User XP
-              const userRef = doc(db!, "Users", auth!.currentUser!.uid);
+              const userRef = doc(db!, "users", auth!.currentUser!.uid);
               await setDoc(
                 userRef,
                 {
@@ -195,10 +197,56 @@ export default function ToiletDetailsSheet({ toilet }: Props) {
       >
         <View style={styles.header}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>{toilet.address}</Text>
-            {toilet.arrondissement && (
-              <Text style={styles.subtitle}>{toilet.arrondissement}</Text>
-            )}
+            <View style={styles.headerImageContainer}>
+              <Image
+                source={require("../../../assets/Toilette_generic.png")}
+                style={styles.headerImage}
+                resizeMode="contain"
+              />
+            </View>
+            <View style={styles.titleRow}>
+              <Text style={styles.title} numberOfLines={1}>
+                {toilet.address}
+              </Text>
+              {toilet.status === "open" ? (
+                <View
+                  style={[
+                    styles.statusBadge,
+                    { backgroundColor: "rgba(34, 197, 94, 0.1)" },
+                  ]}
+                >
+                  <Text
+                    style={{
+                      color: "#22c55e",
+                      fontWeight: "700",
+                      fontSize: 10,
+                    }}
+                  >
+                    En Service
+                  </Text>
+                </View>
+              ) : (
+                <View
+                  style={[
+                    styles.statusBadge,
+                    { backgroundColor: "rgba(239, 68, 68, 0.1)" },
+                  ]}
+                >
+                  <Text
+                    style={{
+                      color: "#ef4444",
+                      fontWeight: "700",
+                      fontSize: 10,
+                    }}
+                  >
+                    Fermé
+                  </Text>
+                </View>
+              )}
+            </View>
+            <Text style={styles.subtitle}>
+              450m • {toilet.arrondissement || "Paris"}
+            </Text>
           </View>
           <TouchableOpacity
             style={styles.favoriteBtn}
@@ -206,34 +254,47 @@ export default function ToiletDetailsSheet({ toilet }: Props) {
           >
             <Ionicons
               name={isFavorite ? "heart" : "heart-outline"}
-              size={28}
-              color="#FF3B30"
+              size={24}
+              color={isFavorite ? "#13e5ec" : "#94a3b8"} // Primary cyan vs muted
             />
           </TouchableOpacity>
         </View>
 
         <View style={styles.badgesRow}>
-          {toilet.status === "open" ? (
-            <View style={[styles.badge, { backgroundColor: "#E5F9E7" }]}>
-              <Text style={{ color: "#34C759", fontWeight: "bold" }}>
-                Ouvert
-              </Text>
-            </View>
-          ) : (
-            <View style={[styles.badge, { backgroundColor: "#FFEBEB" }]}>
-              <Text style={{ color: "#FF3B30", fontWeight: "bold" }}>
-                Hors Service
-              </Text>
-            </View>
-          )}
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>
+          <View style={styles.infoPill}>
+            <Ionicons name="body" size={14} color="#94a3b8" />
+            <Text style={styles.infoPillText}>
+              {toilet.isPMR ? "Oui" : "Non"}
+            </Text>
+          </View>
+          <View style={styles.infoPill}>
+            <Ionicons name="star" size={14} color="#13e5ec" />
+            <Text
+              style={[
+                styles.infoPillText,
+                { color: "#13e5ec", fontWeight: "bold" },
+              ]}
+            >
+              4.2
+            </Text>
+          </View>
+          <View style={styles.infoPill}>
+            <Text style={styles.infoPillText}>
               {toilet.isPaid ? `Payant (${toilet.price || "?"}€)` : "Gratuit"}
             </Text>
           </View>
           {toilet.source === "ratp" && (
-            <View style={[styles.badge, { backgroundColor: "#F4E8FB" }]}>
-              <Text style={{ color: "#AF52DE", fontWeight: "bold" }}>RATP</Text>
+            <View
+              style={[
+                styles.infoPill,
+                { backgroundColor: "rgba(168, 85, 247, 0.1)" },
+              ]}
+            >
+              <Text
+                style={{ color: "#a855f7", fontSize: 10, fontWeight: "bold" }}
+              >
+                RATP
+              </Text>
             </View>
           )}
         </View>
@@ -262,7 +323,7 @@ export default function ToiletDetailsSheet({ toilet }: Props) {
               renderItem={({ item }) => (
                 <View style={styles.commentItem}>
                   <Text style={styles.commentUser}>
-                    {item.userName || "Anonyme"}
+                    {item.pseudo || "Anonyme"}
                   </Text>
                   <Text style={styles.commentText}>{item.comment}</Text>
                 </View>
@@ -324,52 +385,107 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   titleContainer: { flex: 1, paddingRight: 10 },
-  title: { fontSize: 22, fontWeight: "bold", color: "#1C1C1E" },
-  subtitle: { fontSize: 14, color: "#8E8E93", marginTop: 4 },
-  favoriteBtn: { padding: 8 },
-  badgesRow: { flexDirection: "row", marginTop: 15, gap: 10, flexWrap: "wrap" },
+  headerImageContainer: {
+    width: "100%",
+    height: 120,
+    backgroundColor: "rgba(19, 229, 236, 0.05)",
+    borderRadius: 16,
+    marginBottom: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  headerImage: {
+    width: 80,
+    height: 80,
+  },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 4,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: "700",
+    fontFamily: "Plus Jakarta Sans",
+    color: "#0f172a",
+    flex: 1,
+  },
+  statusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 9999,
+    marginLeft: 8,
+  },
+  subtitle: {
+    fontSize: 12,
+    color: "#64748b",
+    fontFamily: "Plus Jakarta Sans",
+    marginBottom: 8,
+  },
+  favoriteBtn: { padding: 8, alignSelf: "center" },
+  badgesRow: {
+    flexDirection: "row",
+    gap: 12,
+    alignItems: "center",
+    marginBottom: 16,
+    flexWrap: "wrap",
+  },
+  infoPill: { flexDirection: "row", alignItems: "center", gap: 4 },
+  infoPillText: {
+    fontSize: 11,
+    color: "#64748b",
+    fontFamily: "Plus Jakarta Sans",
+  },
   badge: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 15,
     backgroundColor: "#F2F2F7",
   },
-  badgeText: { fontWeight: "600", color: "#1C1C1E" },
-  features: { marginTop: 20, gap: 8 },
-  featureText: { fontSize: 16, color: "#8E8E93" },
+  badgeText: { fontWeight: "600", color: "#0f172a" },
+  features: { marginTop: 10, gap: 8 },
+  featureText: {
+    fontSize: 14,
+    color: "#64748b",
+    fontFamily: "Plus Jakarta Sans",
+  },
   commentsContainer: {
     marginTop: 25,
     paddingTop: 20,
     borderTopWidth: 1,
-    borderTopColor: "#F2F2F7",
+    borderTopColor: "#f1f5f9",
   },
   commentsTitle: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "700",
+    fontFamily: "Plus Jakarta Sans",
     marginBottom: 15,
-    color: "#1C1C1E",
+    color: "#0f172a",
   },
   commentsList: {
     marginBottom: 15,
   },
   commentItem: {
     marginBottom: 12,
-    backgroundColor: "#F2F2F7",
-    padding: 10,
-    borderRadius: 8,
+    backgroundColor: "#f6f8f8",
+    padding: 12,
+    borderRadius: 16,
   },
   commentUser: {
-    fontSize: 12,
-    fontWeight: "bold",
-    color: "#007AFF",
-    marginBottom: 2,
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#13e5ec",
+    marginBottom: 4,
+    fontFamily: "Plus Jakarta Sans",
   },
   commentText: {
     fontSize: 14,
-    color: "#1C1C1E",
+    color: "#0f172a",
+    fontFamily: "Plus Jakarta Sans",
   },
   noComments: {
-    color: "#8E8E93",
+    color: "#64748b",
     fontSize: 14,
     fontStyle: "italic",
     marginBottom: 15,
@@ -377,37 +493,52 @@ const styles = StyleSheet.create({
   commentInputRow: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F2F2F7",
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 8,
+    backgroundColor: "#f6f8f8",
+    borderRadius: 9999,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
   },
   commentInput: {
     flex: 1,
-    height: 35,
-    fontSize: 15,
-    color: "#1C1C1E",
+    height: 40,
+    fontSize: 14,
+    fontFamily: "Plus Jakarta Sans",
+    color: "#0f172a",
   },
-  actionContainer: { marginTop: 30, gap: 15 },
+  actionContainer: { marginTop: 30, gap: 12 },
   primaryButton: {
-    backgroundColor: "#000",
+    backgroundColor: "#13e5ec", // Stitch primary
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
-    borderRadius: 12,
+    borderRadius: 9999,
     gap: 8,
+    shadowColor: "#13e5ec",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 4,
   },
-  primaryButtonText: { color: "#FFF", fontSize: 18, fontWeight: "bold" },
+  primaryButtonText: {
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "700",
+    fontFamily: "Plus Jakarta Sans",
+  },
   reportButton: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: "#E5E5EA",
+    borderRadius: 9999,
+    backgroundColor: "rgba(239, 68, 68, 0.1)", // Light red background
     gap: 8,
   },
-  reportButtonText: { color: "#1C1C1E", fontSize: 16, fontWeight: "600" },
+  reportButtonText: {
+    color: "#ef4444",
+    fontSize: 14,
+    fontWeight: "700",
+    fontFamily: "Plus Jakarta Sans",
+  },
 });

@@ -9,6 +9,7 @@ import {
   StatusBar,
   Platform,
   useColorScheme,
+  Image,
 } from "react-native";
 import { useStore } from "../store/useStore";
 import { Ionicons } from "@expo/vector-icons";
@@ -45,13 +46,19 @@ export default function FavoritesScreen() {
     <View
       style={[styles.card, { backgroundColor: isDark ? "#1C1C1E" : "#FFFFFF" }]}
     >
-      {/* Status indicator */}
-      <View
-        style={[
-          styles.statusDot,
-          { backgroundColor: getStatusColor(item.status) },
-        ]}
-      />
+      <View style={styles.imageContainer}>
+        <Image
+          source={require("../../assets/Toilette_generic.png")}
+          style={styles.cardImage}
+          resizeMode="contain"
+        />
+        <View
+          style={[
+            styles.statusDot,
+            { backgroundColor: getStatusColor(item.status) },
+          ]}
+        />
+      </View>
 
       <View style={styles.cardContent}>
         <View style={styles.cardHeader}>
@@ -152,14 +159,14 @@ export default function FavoritesScreen() {
     <SafeAreaView
       style={[
         styles.container,
-        { backgroundColor: isDark ? "#000" : "#F5F5FA" },
+        { backgroundColor: isDark ? "#102122" : "#f6f8f8" },
       ]}
     >
       <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
 
       {/* Header */}
       <View style={styles.header}>
-        <Text style={[styles.title, { color: isDark ? "#FFF" : "#1A1A2E" }]}>
+        <Text style={[styles.title, { color: isDark ? "#f1f5f9" : "#0f172a" }]}>
           Favoris
         </Text>
         <Text style={styles.subtitle}>
@@ -213,37 +220,57 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   title: {
-    fontSize: 32,
-    fontWeight: "800",
+    fontSize: 28,
+    fontFamily: "Plus Jakarta Sans",
+    fontWeight: "700",
     letterSpacing: -0.5,
   },
   subtitle: {
     fontSize: 14,
-    color: "#8E8E93",
+    fontFamily: "Plus Jakarta Sans",
+    color: "#64748b",
     marginTop: 4,
   },
   list: {
     paddingHorizontal: 20,
     paddingBottom: 100,
-    gap: 12,
+    gap: 16,
   },
   card: {
     flexDirection: "row",
     alignItems: "flex-start",
     padding: 16,
-    borderRadius: 20,
+    borderRadius: 24,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.05)",
+    gap: 16, // added gap between image and content
+  },
+  imageContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 12,
+    backgroundColor: "rgba(19, 229, 236, 0.05)", // light primary tint background
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cardImage: {
+    width: 44,
+    height: 44,
   },
   statusDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginTop: 6,
-    marginRight: 12,
+    position: "absolute",
+    bottom: -2,
+    right: -2,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    borderWidth: 2,
+    borderColor: "#FFF", // This gets overridden dynamically for dark mode if needed but white is standard for border out badges
   },
   cardContent: {
     flex: 1,
@@ -255,29 +282,32 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 16,
+    fontFamily: "Plus Jakarta Sans",
     fontWeight: "700",
     flex: 1,
     marginRight: 8,
   },
   cardSubtitle: {
     fontSize: 13,
-    color: "#8E8E93",
+    fontFamily: "Plus Jakarta Sans",
+    color: "#64748b",
     marginTop: 2,
   },
   tagsRow: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 6,
-    marginTop: 10,
+    marginTop: 12,
   },
   tag: {
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 9999,
   },
   tagText: {
     fontSize: 12,
-    fontWeight: "600",
+    fontFamily: "Plus Jakarta Sans",
+    fontWeight: "700",
   },
   emptyContainer: {
     flex: 1,
@@ -286,21 +316,23 @@ const styles = StyleSheet.create({
     padding: 40,
   },
   emptyIconBg: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 24,
   },
   emptyText: {
     fontSize: 20,
+    fontFamily: "Plus Jakarta Sans",
     fontWeight: "700",
     textAlign: "center",
   },
   emptySubtext: {
     fontSize: 14,
-    color: "#8E8E93",
+    fontFamily: "Plus Jakarta Sans",
+    color: "#64748b",
     marginTop: 8,
     textAlign: "center",
     lineHeight: 20,

@@ -41,38 +41,53 @@ export default function SearchBar({
 
   return (
     <View style={styles.wrapper}>
-      <View
-        style={[
-          styles.container,
-          { backgroundColor: isDark ? "#1C1C1E" : "#FFF" },
-        ]}
-      >
-        <Ionicons
-          name="search"
-          size={20}
-          color="#8E8E93"
-          style={styles.searchIcon}
-        />
-        <TextInput
-          style={[styles.input, { color: isDark ? "#FFF" : "#000" }]}
-          placeholder="Rechercher une adresse..."
-          placeholderTextColor="#8E8E93"
-          value={query}
-          onChangeText={(text) => {
-            setQuery(text);
-            onSearch(text);
-          }}
-        />
-        {query.length > 0 && (
-          <TouchableOpacity
-            onPress={() => {
-              setQuery("");
-              onSearch("");
+      <View style={styles.topRow}>
+        <View
+          style={[
+            styles.container,
+            { backgroundColor: isDark ? "#1C1C1E" : "#FFF" },
+          ]}
+        >
+          <Ionicons
+            name="search"
+            size={20}
+            color="#8E8E93"
+            style={styles.searchIcon}
+          />
+          <TextInput
+            style={[styles.input, { color: isDark ? "#FFF" : "#000" }]}
+            placeholder="Rechercher une adresse..."
+            placeholderTextColor="#8E8E93"
+            value={query}
+            onChangeText={(text) => {
+              setQuery(text);
+              onSearch(text);
             }}
-          >
-            <Ionicons name="close-circle" size={20} color="#8E8E93" />
-          </TouchableOpacity>
-        )}
+          />
+          {query.length > 0 && (
+            <TouchableOpacity
+              onPress={() => {
+                setQuery("");
+                onSearch("");
+              }}
+            >
+              <Ionicons name="close-circle" size={20} color="#8E8E93" />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <TouchableOpacity
+          style={[
+            styles.filterBtn,
+            { backgroundColor: isDark ? "#1C1C1E" : "#FFF" },
+          ]}
+        >
+          <Ionicons
+            name="options-outline"
+            size={22}
+            color={isDark ? "#FFF" : "#000"}
+          />
+        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -95,14 +110,14 @@ export default function SearchBar({
             >
               <Ionicons
                 name={filter.icon as any}
-                size={14}
-                color={isActive ? "#FFF" : "#007AFF"}
+                size={16}
+                color={isActive ? "#13e5ec" : "#8E8E93"}
               />
               <Text
                 style={[
                   styles.filterText,
                   { color: isDark ? "#FFF" : "#1C1C1E" },
-                  isActive && { color: "#FFF" },
+                  isActive && { color: "#13e5ec" },
                 ]}
               >
                 {filter.label}
@@ -123,17 +138,39 @@ const styles = StyleSheet.create({
     right: 15,
     zIndex: 10,
   },
-  container: {
+  topRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 12,
-    height: 50,
-    borderRadius: 25,
+    gap: 10,
+  },
+  container: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    height: 56,
+    borderRadius: 9999, // Stitch pill shape
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
     elevation: 5,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.05)",
+  },
+  filterBtn: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.05)",
   },
   searchIcon: {
     marginRight: 10,
@@ -141,10 +178,10 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    fontWeight: "500",
+    fontFamily: "Plus Jakarta Sans",
   },
   filterScroll: {
-    marginTop: 10,
+    marginTop: 12,
   },
   filterContent: {
     paddingRight: 15,
@@ -152,22 +189,26 @@ const styles = StyleSheet.create({
   filterChip: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 9999,
     marginRight: 8,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,
-    gap: 5,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.05)",
   },
   filterChipActive: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "rgba(19, 229, 236, 0.15)", // Primary with opacity
+    borderColor: "rgba(19, 229, 236, 0.3)",
   },
   filterText: {
-    fontSize: 13,
+    fontSize: 14,
+    fontFamily: "Plus Jakarta Sans",
     fontWeight: "600",
   },
 });
