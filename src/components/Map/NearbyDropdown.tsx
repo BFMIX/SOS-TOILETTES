@@ -31,7 +31,7 @@ export default function NearbyDropdown({
 
   return (
     <View
-      style={[styles.container, { top: Platform.OS === "ios" ? 140 : 120 }]}
+      style={[styles.container, { bottom: Platform.OS === "ios" ? 115 : 95 }]}
     >
       <TouchableOpacity
         style={[
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   dropdown: {
-    marginTop: 8,
+    marginBottom: 8,
     borderRadius: 20,
     padding: 8,
     shadowColor: "#000",

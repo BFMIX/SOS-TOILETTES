@@ -1,5 +1,11 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Platform,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 interface Props {
@@ -49,7 +55,7 @@ export default function FloatingActionButtons({
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 100,
+    bottom: Platform.OS === "ios" ? 180 : 160,
     right: 20,
     alignItems: "flex-end",
     gap: 15,

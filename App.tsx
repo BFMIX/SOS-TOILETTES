@@ -264,19 +264,20 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     flexDirection: "row",
-    height: Platform.OS === "ios" ? 75 : 65,
-    borderRadius: 30, // fully rounded
-    marginHorizontal: 20,
+    height: Platform.OS === "ios" ? 85 : 70, // Slightly taller since it's flush to bottom
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    marginHorizontal: 0,
     position: "absolute",
-    bottom: Platform.OS === "ios" ? 30 : 20,
+    bottom: 0,
     left: 0,
     right: 0,
-    paddingBottom: 0,
-    paddingTop: 0,
+    paddingBottom: Platform.OS === "ios" ? 20 : 0, // Safe area padding
+    paddingTop: 10,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 10 },
+    shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.1,
-    shadowRadius: 20,
+    shadowRadius: 10,
     elevation: 10,
   },
   tabItem: {

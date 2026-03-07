@@ -9,8 +9,11 @@ import {
   TouchableOpacity,
   Text,
   Platform,
+  Keyboard,
 } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView from "react-native-map-clustering";
+import { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { Ionicons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import CustomMapStyleDark from "../config/mapStyleDark.json";
 import CustomMapStyleLight from "../config/mapStyleLight.json";
@@ -42,7 +45,6 @@ export default function MapScreen() {
   const [showAll, setShowAll] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
-  const [currentZoomDelta, setCurrentZoomDelta] = useState<number>(0);
 
   // Initialization
   useEffect(() => {
@@ -64,22 +66,27 @@ export default function MapScreen() {
   }, [userLocation, user?.uid, searchRadius, showGlobal]);
 
   const animateTo3D = (lat: number, lon: number) => {
-    mapRef.current?.animateCamera(
+    (mapRef.current as any)?.animateToRegion(
       {
-        center: { latitude: lat, longitude: lon },
-        pitch: 60, // Better 3D angle
-        heading: 0,
-        altitude: 800, // Balanced altitude for detail
-        zoom: 17.5,
+        latitude: lat,
+        longitude: lon,
+        latitudeDelta: 0.004,
+        longitudeDelta: 0.004,
       },
-      { duration: 1500 },
+      1500,
     );
   };
 
-  const handleMarkerPress = (toilet: Toilet) => {
-    setSelectedToilet(toilet);
+  const handleMarkerPress = (item: any) => {
+    // If it's an address from search bar, just pan to it
+    if (!item.id && item.latitude && item.longitude) {
+      animateTo3D(item.latitude, item.longitude);
+      return;
+    }
+    // Otherwise it's a Toilet pin
+    setSelectedToilet(item);
     // Slight offset to center the toilet while showing the sheet
-    animateTo3D(toilet.location.latitude - 0.0005, toilet.location.longitude);
+    animateTo3D(item.location.latitude - 0.0005, item.location.longitude);
   };
 
   const locateUser = () => {
@@ -110,8 +117,6 @@ export default function MapScreen() {
     return true;
   });
 
-  const isZoomedOut = currentZoomDelta > 0.04;
-
   const getMarkerColor = (t: Toilet) => {
     // 2 negative reports in 48h drops it to out of order
     const isCommunityClosed =
@@ -133,6 +138,7 @@ export default function MapScreen() {
         isDark={isDark}
         onSearch={setSearchQuery}
         onFilterChange={setActiveFilters}
+        onLocationSelect={handleMarkerPress}
       />
 
       <NearbyDropdown
@@ -141,57 +147,56 @@ export default function MapScreen() {
         onSelectToilet={handleMarkerPress}
       />
 
-      {isZoomedOut && (
-        <View style={styles.zoomWarning}>
-          <Text style={styles.zoomWarningText}>
-            Zommez pour voir les sanisettes
-          </Text>
-        </View>
-      )}
-
       <MapView
         ref={mapRef}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        initialCamera={{
-          center: { latitude: 48.8566, longitude: 2.3522 },
-          pitch: 45,
-          heading: 0,
-          altitude: 10000,
-          zoom: 13,
+        initialRegion={{
+          latitude: 48.8566,
+          longitude: 2.3522,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
         }}
-        onRegionChangeComplete={(region) => {
-          setCurrentZoomDelta(region.latitudeDelta);
-        }}
-        customMapStyle={isDark ? CustomMapStyleDark : CustomMapStyleLight}
-        showsUserLocation
-        showsMyLocationButton={false}
-        showsCompass={false}
+        clusterColor="#1C1C1E"
+        clusterTextColor="#FFF"
+        onPress={() => Keyboard.dismiss()}
+        onPanDrag={() => Keyboard.dismiss()}
       >
-        {!isZoomedOut &&
-          displayedToilets.map((toilet) => (
-            <Marker
-              key={toilet.id}
-              coordinate={toilet.location}
-              onPress={() => handleMarkerPress(toilet)}
-              tracksViewChanges={true}
-              anchor={{ x: 0.5, y: 0.5 }}
-            >
-              <View style={styles.markerContainer}>
-                <Image
-                  source={require("../../assets/Toilette_generic.png")}
-                  style={styles.markerImage}
-                  resizeMode="contain"
-                />
-                <View
-                  style={[
-                    styles.halo,
-                    { backgroundColor: getMarkerColor(toilet) },
-                  ]}
-                />
-              </View>
-            </Marker>
-          ))}
+        {/* User Location Custom Marker */}
+        {userLocation && (
+          <Marker
+            coordinate={userLocation}
+            anchor={{ x: 0.5, y: 0.5 }}
+            tracksViewChanges={false}
+          >
+            <View style={styles.userMarkerContainer}>
+              <Ionicons name="person-circle" size={36} color="#007AFF" />
+            </View>
+          </Marker>
+        )}
+        {displayedToilets.map((toilet) => (
+          <Marker
+            key={toilet.id}
+            coordinate={toilet.location}
+            onPress={() => handleMarkerPress(toilet)}
+            tracksViewChanges={true}
+            anchor={{ x: 0.5, y: 0.5 }}
+          >
+            <View style={styles.markerContainer}>
+              <Image
+                source={require("../../assets/paris_sanisette.png")}
+                style={styles.markerImage}
+                resizeMode="contain"
+              />
+              <View
+                style={[
+                  styles.halo,
+                  { backgroundColor: getMarkerColor(toilet) },
+                ]}
+              />
+            </View>
+          </Marker>
+        ))}
       </MapView>
 
       <FloatingActionButtons
@@ -231,26 +236,6 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#000" },
   map: { width: "100%", height: "100%" },
-  zoomWarning: {
-    position: "absolute",
-    top: Platform.OS === "ios" ? 140 : 120, // below search bar
-    alignSelf: "center",
-    backgroundColor: "rgba(15, 23, 42, 0.9)",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 9999,
-    zIndex: 10,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  zoomWarningText: {
-    color: "#fff",
-    fontFamily: "Plus Jakarta Sans",
-    fontWeight: "600",
-    fontSize: 13,
-  },
   loadingContainer: {
     position: "absolute",
     top: Platform.OS === "ios" ? 120 : 100,
@@ -305,5 +290,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 10,
     marginTop: 4,
+  },
+  userMarkerContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#FFF",
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 5,
   },
 });

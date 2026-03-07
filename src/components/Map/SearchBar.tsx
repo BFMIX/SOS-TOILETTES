@@ -9,27 +9,51 @@ import {
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import FilterModal from "./FilterModal";
+import { Toilet } from "../../models/types";
+import { useStore } from "../../store/useStore";
 
 interface SearchBarProps {
   onSearch: (text: string) => void;
   onFilterChange: (filters: any) => void;
   isDark: boolean;
+  onLocationSelect: (location: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  }) => void;
 }
 
 export default function SearchBar({
   onSearch,
   onFilterChange,
   isDark,
+  onLocationSelect,
 }: SearchBarProps) {
   const [query, setQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [isFilterModalVisible, setFilterModalVisible] = useState(false);
+  const [apiSuggestions, setApiSuggestions] = useState<any[]>([]);
 
-  const filters = [
-    { id: "pmr", label: "PMR", icon: "body" },
-    { id: "free", label: "Gratuit", icon: "cash-outline" },
-    { id: "open", label: "Ouvert", icon: "time-outline" },
-    { id: "baby", label: "Bébé", icon: "baby-outline" },
-  ];
+  const searchAddress = async (text: string) => {
+    setQuery(text);
+    onSearch(text);
+
+    if (text.length > 2) {
+      try {
+        // Paris coordinates hint
+        const response = await fetch(
+          `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(text)}&lat=48.8566&lon=2.3522&limit=5`,
+        );
+        const data = await response.json();
+        setApiSuggestions(data.features || []);
+      } catch (error) {
+        console.error("Error fetching addresses:", error);
+      }
+    } else {
+      setApiSuggestions([]);
+    }
+  };
 
   const toggleFilter = (id: string) => {
     const newFilters = activeFilters.includes(id)
@@ -59,16 +83,14 @@ export default function SearchBar({
             placeholder="Rechercher une adresse..."
             placeholderTextColor="#8E8E93"
             value={query}
-            onChangeText={(text) => {
-              setQuery(text);
-              onSearch(text);
-            }}
+            onChangeText={searchAddress}
           />
           {query.length > 0 && (
             <TouchableOpacity
               onPress={() => {
                 setQuery("");
                 onSearch("");
+                setApiSuggestions([]);
               }}
             >
               <Ionicons name="close-circle" size={20} color="#8E8E93" />
@@ -81,6 +103,7 @@ export default function SearchBar({
             styles.filterBtn,
             { backgroundColor: isDark ? "#1C1C1E" : "#FFF" },
           ]}
+          onPress={() => setFilterModalVisible(true)}
         >
           <Ionicons
             name="options-outline"
@@ -90,42 +113,62 @@ export default function SearchBar({
         </TouchableOpacity>
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.filterScroll}
-        contentContainerStyle={styles.filterContent}
-      >
-        {filters.map((filter) => {
-          const isActive = activeFilters.includes(filter.id);
-          return (
-            <TouchableOpacity
-              key={filter.id}
-              onPress={() => toggleFilter(filter.id)}
-              style={[
-                styles.filterChip,
-                { backgroundColor: isDark ? "#1C1C1E" : "#FFF" },
-                isActive && styles.filterChipActive,
-              ]}
-            >
-              <Ionicons
-                name={filter.icon as any}
-                size={16}
-                color={isActive ? "#13e5ec" : "#8E8E93"}
-              />
-              <Text
+      {/* Autocomplete Dropdown */}
+      {apiSuggestions.length > 0 && (
+        <View
+          style={[
+            styles.autocompleteContainer,
+            { backgroundColor: isDark ? "#1C1C1E" : "#FFF" },
+          ]}
+        >
+          {apiSuggestions.map((feature, index) => {
+            const addressLabel = feature.properties.label;
+            const [lon, lat] = feature.geometry.coordinates;
+
+            return (
+              <TouchableOpacity
+                key={feature.properties.id || index.toString()}
                 style={[
-                  styles.filterText,
-                  { color: isDark ? "#FFF" : "#1C1C1E" },
-                  isActive && { color: "#13e5ec" },
+                  styles.suggestionItem,
+                  index < apiSuggestions.length - 1 && {
+                    borderBottomColor: isDark ? "#333" : "#F0F0F0",
+                    borderBottomWidth: 1,
+                  },
                 ]}
+                onPress={() => {
+                  setQuery("");
+                  onSearch("");
+                  setApiSuggestions([]);
+                  onLocationSelect({
+                    latitude: lat,
+                    longitude: lon,
+                    address: addressLabel,
+                  });
+                }}
               >
-                {filter.label}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+                <Ionicons name="location-outline" size={16} color="#8E8E93" />
+                <Text
+                  style={[
+                    styles.suggestionText,
+                    { color: isDark ? "#FFF" : "#000" },
+                  ]}
+                  numberOfLines={1}
+                >
+                  {addressLabel}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      )}
+
+      <FilterModal
+        isVisible={isFilterModalVisible}
+        onClose={() => setFilterModalVisible(false)}
+        activeFilters={activeFilters}
+        onToggleFilter={toggleFilter}
+        isDark={isDark}
+      />
     </View>
   );
 }
@@ -180,35 +223,28 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Plus Jakarta Sans",
   },
-  filterScroll: {
-    marginTop: 12,
-  },
-  filterContent: {
-    paddingRight: 15,
-  },
-  filterChip: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 9999,
-    marginRight: 8,
+  autocompleteContainer: {
+    marginTop: 8,
+    borderRadius: 16,
+    paddingVertical: 8,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-    gap: 6,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 5,
     borderWidth: 1,
     borderColor: "rgba(0,0,0,0.05)",
   },
-  filterChipActive: {
-    backgroundColor: "rgba(19, 229, 236, 0.15)", // Primary with opacity
-    borderColor: "rgba(19, 229, 236, 0.3)",
+  suggestionItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    gap: 10,
   },
-  filterText: {
-    fontSize: 14,
+  suggestionText: {
     fontFamily: "Plus Jakarta Sans",
-    fontWeight: "600",
+    fontSize: 14,
+    flex: 1,
   },
 });
