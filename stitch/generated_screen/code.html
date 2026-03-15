@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SOS TOILETTES - Favoris</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            airbnb: '#FF385C',
+            darkBg: '#000000',
+            darkCard: '#1A1A1A',
+          },
+          borderRadius: {
+            '24': '24px',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scroll">
+    /* Hide scrollbar for cleaner mobile look */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+<!-- Container for side-by-side or stacked display -->
+<main class="flex flex-col lg:flex-row gap-8 p-4 justify-center items-start min-h-screen">
+<!-- BEGIN: Light Mode Screen -->
+<section class="w-full max-w-[375px] h-[812px] bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col border border-gray-200 relative" data-purpose="light-mode-screen">
+<!-- BEGIN: Header -->
+<header class="pt-12 px-6 pb-4 bg-white sticky top-0 z-10">
+<div class="flex justify-between items-center mb-6">
+<h1 class="text-3xl font-bold text-black">Favoris</h1>
+<button class="p-2 hover:bg-gray-100 rounded-full">
+<svg class="w-6 h-6" fill="none" stroke="black" stroke-width="2.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex border-b border-gray-100">
+<button class="pb-3 px-2 border-b-2 border-black text-black font-semibold text-sm mr-6">Liste</button>
+<button class="pb-3 px-2 text-gray-500 font-semibold text-sm">Récents</button>
+</nav>
+</header>
+<!-- END: Header -->
+<!-- BEGIN: Favorites List -->
+<div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-24">
+<!-- List Item 1 -->
+<div class="py-6 border-b border-gray-100">
+<div class="flex items-start gap-4 mb-3">
+<img alt="Sanisette" class="w-16 h-16 rounded-xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO44jIHoAnfuHehIN6hHYVnpXcISuyESA-8-TgbyJf8wFbOvfsgsFpMi6JJ9E4qaG16elUqGh8Qk2lnhxBVZUHAVw_KS5MTnWHXjjIumqz2UX4YfUR9Mfypab7u8uyRpoRzmE2x80Fll9d2F_3uTWa_WIqNBwWrk3PdgjmumOWVD_IiCxzr_4er0VzujeNCmVyS-e4hQSlN1I35sbfzti4HHwmIY69E07d75NKn7i3JcBfHLuuWSPHZrdYuOiO0nPlQ4k8Y-nALjo"/>
+<div class="flex-1">
+<h3 class="font-bold text-black text-lg">Sanisette JCDecaux</h3>
+<p class="text-gray-600 text-sm">12 Rue de Rivoli, Paris</p>
+</div>
+<button class="pt-1">
+<svg class="w-6 h-6" fill="#FF385C" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001Z"></path>
+</svg>
+</button>
+</div>
+<div class="flex gap-4 text-xs font-medium text-gray-500">
+<span>0.3 km</span>
+<span>•</span>
+<span>5 min walk</span>
+</div>
+</div>
+<!-- List Item 2 -->
+<div class="py-6 border-b border-gray-100">
+<div class="flex items-start gap-4 mb-3">
+<img alt="Sanisette" class="w-16 h-16 rounded-xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBodOrsCsl2XraqbfaXurxqx-9z8XdKyToZ7HyqYlSkP80ltizqwpPM4FKjqgs4VEsrnl-ZuwO9Do8--9n5RrIAAvnIHqkx1aEZFGxF7qj_MLzMgQIRzjJKje7xTDHmtBQHgZw1S8ErERkZFWR-e0B7mBslVlygoPVT_oSAc2Wf6YdjdDpBe4c9B129MH8bO5CieHVC8M4OQqrSRTAHYm6XW_1SqPK3XsRRqRXyOtQd5-dz_5vVwWpph_dzBUvJkxURk5Vd4TS7qd4"/>
+<div class="flex-1">
+<h3 class="font-bold text-black text-lg">Hôtel de Ville</h3>
+<p class="text-gray-600 text-sm">Place de l'Hôtel de Ville</p>
+</div>
+<button class="pt-1">
+<svg class="w-6 h-6" fill="#FF385C" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001Z"></path>
+</svg>
+</button>
+</div>
+<div class="flex gap-4 text-xs font-medium text-gray-500">
+<span>0.8 km</span>
+<span>•</span>
+<span>12 min walk</span>
+</div>
+</div>
+<!-- List Item 3 -->
+<div class="py-6 border-b border-gray-100">
+<div class="flex items-start gap-4 mb-3">
+<img alt="Sanisette" class="w-16 h-16 rounded-xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0T1m3X6H_XkCjUlop3HEaIiVqtK8PByRwwAIWibRuhrdRJMhS-jDIn3P4iCo9aFT_6TpJzGN5UJkCRcnn9JZYjBlNdZoIX7n8sb8HtoOvR-G5TavOI9iACE8UO5ZcsYauv2sFblQwl6VIWe7V1uN6f15_m8uMWZAIE-ua0UJTsYYhIX9zCrKqAQ3ajWOEtkd4g3kIN6it3lHwN76Y3Jw2czPaDOJ74wdp8XMtQNJG7KLETpxOg7Y4Pc7p72T3BBC3fv12viLe8RQ"/>
+<div class="flex-1">
+<h3 class="font-bold text-black text-lg">Gare de Lyon</h3>
+<p class="text-gray-600 text-sm">Place Louis Armand</p>
+</div>
+<button class="pt-1">
+<svg class="w-6 h-6" fill="#FF385C" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001Z"></path>
+</svg>
+</button>
+</div>
+<div class="flex gap-4 text-xs font-medium text-gray-500">
+<span>1.5 km</span>
+<span>•</span>
+<span>20 min walk</span>
+</div>
+</div>
+</div>
+<!-- END: Favorites List -->
+<!-- BEGIN: Bottom Menu -->
+<nav class="absolute bottom-0 w-full bg-white border-t border-gray-200 py-3 rounded-t-24 flex justify-around items-center">
+<button class="flex flex-col items-center gap-1 group">
+<svg class="w-7 h-7" fill="none" stroke="gray" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 6.75V15m6-10.5v.008H15V4.5m0 6v.008H15V10.5m0 6v.008H15V16.5m-6-9h.008v.008H9V7.5Zm0 6h.008v.008H9v-.008Zm-3-6h.008v.008H6V7.5Zm0 6h.008v.008H6v-.008Z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] text-gray-500 font-medium">Map</span>
+</button>
+<button class="flex flex-col items-center gap-1">
+<svg class="w-7 h-7" fill="#FF385C" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001Z"></path>
+</svg>
+<span class="text-[10px] text-black font-bold">Favoris</span>
+</button>
+<button class="flex flex-col items-center gap-1">
+<svg class="w-7 h-7" fill="none" stroke="gray" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.963-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] text-gray-500 font-medium">Profil</span>
+</button>
+</nav>
+<!-- END: Bottom Menu -->
+</section>
+<!-- END: Light Mode Screen -->
+<!-- BEGIN: Dark Mode Screen -->
+<section class="w-full max-w-[375px] h-[812px] bg-darkBg rounded-[40px] shadow-2xl overflow-hidden flex flex-col border border-gray-800 relative" data-purpose="dark-mode-screen">
+<!-- BEGIN: Header (Dark) -->
+<header class="pt-12 px-6 pb-4 bg-darkBg sticky top-0 z-10">
+<div class="flex justify-between items-center mb-6">
+<h1 class="text-3xl font-bold text-white">Favoris</h1>
+<button class="p-2 hover:bg-white/10 rounded-full">
+<svg class="w-6 h-6" fill="none" stroke="white" stroke-width="2.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+<!-- Navigation Tabs (Dark) -->
+<nav class="flex border-b border-gray-800">
+<button class="pb-3 px-2 border-b-2 border-white text-white font-semibold text-sm mr-6">Liste</button>
+<button class="pb-3 px-2 text-gray-400 font-semibold text-sm">Récents</button>
+</nav>
+</header>
+<!-- END: Header (Dark) -->
+<!-- BEGIN: Favorites List (Dark) -->
+<div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-24">
+<!-- List Item 1 (Dark) -->
+<div class="py-6 border-b border-gray-800">
+<div class="flex items-start gap-4 mb-3">
+<img alt="Sanisette" class="w-16 h-16 rounded-xl object-cover ring-1 ring-white/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBN0FTzdBHpqwxsMzxBrX9PAA1ccXB8BBOQSJsVtZRYwMHDVtFUTXizL8nAcQZtYzZsFNdyiaA3xNyBdpURoYwacSHBNtQ-R5g5ip8z-7RZFLCAeR_phA11WfQrITW-ygsb3nbSH4D6WnWxyZpm7o5IqOuiVtZg8EeFXD-vzyRkhCLUbrO__SWINLms8vxSTDAtCVDaTPHKKHZqy1kV6r5dO1w5b7QMkzBtzMUwqgHz95LSqCudXDnyeomKOg-wilZqR4_aw43thow"/>
+<div class="flex-1">
+<h3 class="font-bold text-white text-lg">Sanisette JCDecaux</h3>
+<p class="text-gray-400 text-sm">12 Rue de Rivoli, Paris</p>
+</div>
+<button class="pt-1">
+<svg class="w-6 h-6" fill="#FF385C" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001Z"></path>
+</svg>
+</button>
+</div>
+<div class="flex gap-4 text-xs font-medium text-gray-400">
+<span>0.3 km</span>
+<span>•</span>
+<span>5 min walk</span>
+</div>
+</div>
+<!-- List Item 2 (Dark) -->
+<div class="py-6 border-b border-gray-800">
+<div class="flex items-start gap-4 mb-3">
+<img alt="Sanisette" class="w-16 h-16 rounded-xl object-cover ring-1 ring-white/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCraX0j1Aa-p-mPEANqATpkpbqGkK4MpKG651chbwf8CAevYkAPbkZliQBFEZ-I49e6eYFkqbQhq-z8aeTZqTiLwpnwB6QGDK0VS0mvhg_Hmoe-9RfcqyGK6_PyufP7s2Haew8jH1yX3HCErzYZs8W3mPyBROaq9rLWagNbU9G4rp1o6cdzjhiOIY0FfRwE592rZDfUJLY7kaVVrFItnNr-nH39GmJYwaPjI2VRJn-KA_6bFMgIuuCcv9kCv257teMnIjzci4lqZ5I"/>
+<div class="flex-1">
+<h3 class="font-bold text-white text-lg">Hôtel de Ville</h3>
+<p class="text-gray-400 text-sm">Place de l'Hôtel de Ville</p>
+</div>
+<button class="pt-1">
+<svg class="w-6 h-6" fill="#FF385C" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001Z"></path>
+</svg>
+</button>
+</div>
+<div class="flex gap-4 text-xs font-medium text-gray-400">
+<span>0.8 km</span>
+<span>•</span>
+<span>12 min walk</span>
+</div>
+</div>
+<!-- List Item 3 (Dark) -->
+<div class="py-6 border-b border-gray-800">
+<div class="flex items-start gap-4 mb-3">
+<img alt="Sanisette" class="w-16 h-16 rounded-xl object-cover ring-1 ring-white/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQCI2dBrVmuS4DXRdL_6QXtearYo0hQOpMjss8685Rpj-BPZ7iYMR2lFimJtdvsrSCRGXDty8MXUfQcUtcXB46FQMU28NRhHUJbXcb5vPlrMMQxWByqnf0EF4HoJ1NOy3brSy5X-o5Y1KDneSK3Ahzz7Dhp53DD4k2hecnzWiOEG7lhaaTczSA9hFdaN5akyQFyrESXmNwGHfTR3iHkdvadini4Lhj8ZXhzjl_ZClWtRaxkxDmijXjTo4AQXbhScR2eYO-uRDMIh0"/>
+<div class="flex-1">
+<h3 class="font-bold text-white text-lg">Gare de Lyon</h3>
+<p class="text-gray-400 text-sm">Place Louis Armand</p>
+</div>
+<button class="pt-1">
+<svg class="w-6 h-6" fill="#FF385C" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001Z"></path>
+</svg>
+</button>
+</div>
+<div class="flex gap-4 text-xs font-medium text-gray-400">
+<span>1.5 km</span>
+<span>•</span>
+<span>20 min walk</span>
+</div>
+</div>
+</div>
+<!-- END: Favorites List (Dark) -->
+<!-- BEGIN: Bottom Menu (Dark) -->
+<nav class="absolute bottom-0 w-full bg-darkBg border-t border-gray-800 py-3 rounded-t-24 flex justify-around items-center">
+<button class="flex flex-col items-center gap-1">
+<svg class="w-7 h-7" fill="none" stroke="#9ca3af" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 6.75V15m6-10.5v.008H15V4.5m0 6v.008H15V10.5m0 6v.008H15V16.5m-6-9h.008v.008H9V7.5Zm0 6h.008v.008H9v-.008Zm-3-6h.008v.008H6V7.5Zm0 6h.008v.008H6v-.008Z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] text-gray-400 font-medium">Map</span>
+</button>
+<button class="flex flex-col items-center gap-1">
+<svg class="w-7 h-7" fill="#FF385C" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001Z"></path>
+</svg>
+<span class="text-[10px] text-white font-bold">Favoris</span>
+</button>
+<button class="flex flex-col items-center gap-1">
+<svg class="w-7 h-7" fill="none" stroke="#9ca3af" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.963-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] text-gray-400 font-medium">Profil</span>
+</button>
+</nav>
+<!-- END: Bottom Menu (Dark) -->
+</section>
+<!-- END: Dark Mode Screen -->
+</main>
+</body></html>

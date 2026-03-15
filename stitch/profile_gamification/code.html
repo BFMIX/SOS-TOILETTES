@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SOS TOILETTES - Profil</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1.5rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-icon { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-slate-100 dark:bg-slate-950 p-4 md:p-8 flex flex-col md:flex-row gap-8 justify-center items-start min-h-screen">
+<!-- LIGHT MODE VERSION -->
+<div class="w-full max-w-[390px] h-[844px] bg-background-light text-slate-900 rounded-xl overflow-hidden shadow-2xl relative flex flex-col border border-slate-200">
+<!-- Header -->
+<div class="flex items-center justify-between p-6">
+<h1 class="text-2xl font-800 tracking-tight">Profil</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm border border-slate-100">
+<span class="material-symbols-outlined text-slate-600">settings</span>
+</button>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto px-6 pb-24">
+<!-- Profile Card -->
+<div class="bg-white rounded-lg p-6 shadow-sm border border-slate-100 flex flex-col items-center mb-6">
+<div class="relative mb-4">
+<div class="w-24 h-24 rounded-full border-4 border-primary/10 overflow-hidden bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="Portrait of a smiling young man with a beard" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-n9jLD-U0seZ1Sj-00yfVh_DLVN7l79n4IflwqRugAOzGmGN4lRuIDkfjyI5ms1BJmm5GMqcVY4hL2jzQ-x0AQJi6eoCWwhuRNX0kCDE-XQRWWAvwHNjElXCWguBMoBqriXVC1XRdS9mGQZKmpCCSWRwKXQoJoVavMe4lcdC_X6yVXLvRdMOeGVFymQ7kArEK7zyNNb-KvW8pcTlW1j7T5x2TP3mFHy4_NFvVE0I1DLbrmeXqzoxFSmnmCxk9bEKiPlvoxqaafVk"/>
+</div>
+<div class="absolute -bottom-2 right-0 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full border-2 border-white">PRO</div>
+</div>
+<h2 class="text-xl font-bold mb-1">Bonjour, Alex</h2>
+<div class="flex items-center gap-2 bg-primary/10 text-primary px-3 py-1 rounded-full mb-2">
+<span class="material-symbols-outlined text-sm">verified</span>
+<span class="text-xs font-bold uppercase tracking-wider">Le Toiletteur</span>
+</div>
+<p class="text-slate-500 text-xs">Membre depuis Janvier 2023</p>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="bg-white rounded-lg p-5 shadow-sm border border-slate-100">
+<div class="text-primary mb-2">
+<span class="material-symbols-outlined">stars</span>
+</div>
+<p class="text-2xl font-800">42</p>
+<p class="text-slate-500 text-xs font-medium">Points XP</p>
+</div>
+<div class="bg-white rounded-lg p-5 shadow-sm border border-slate-100">
+<div class="text-rose-500 mb-2">
+<span class="material-symbols-outlined">report</span>
+</div>
+<p class="text-2xl font-800">12</p>
+<p class="text-slate-500 text-xs font-medium">Signalements</p>
+</div>
+</div>
+<!-- Settings List -->
+<div class="space-y-2">
+<h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest px-1 mb-4">Compte</h3>
+<div class="bg-white rounded-lg border border-slate-100 overflow-hidden">
+<button class="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500">person</span>
+<span class="font-semibold text-sm">Paramètres du compte</span>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</button>
+<div class="h-[1px] bg-slate-100 mx-4"></div>
+<button class="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500">dark_mode</span>
+<span class="font-semibold text-sm">Mode Sombre</span>
+</div>
+<div class="w-10 h-6 bg-slate-200 rounded-full relative">
+<div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div>
+</div>
+</button>
+<div class="h-[1px] bg-slate-100 mx-4"></div>
+<button class="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500">info</span>
+<span class="font-semibold text-sm">Crédits</span>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom NavBar -->
+<div class="absolute bottom-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-t border-slate-100 px-6 py-4 flex justify-between items-center rounded-t-lg">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="text-[10px] font-bold">Map</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span class="text-[10px] font-bold">Favorites</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined active-icon">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+</a>
+</div>
+</div>
+<!-- DARK MODE VERSION -->
+<div class="w-full max-w-[390px] h-[844px] bg-background-dark text-slate-100 rounded-xl overflow-hidden shadow-2xl relative flex flex-col border border-slate-800">
+<!-- Header -->
+<div class="flex items-center justify-between p-6">
+<h1 class="text-2xl font-800 tracking-tight">Profil</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-900 shadow-lg border border-slate-800">
+<span class="material-symbols-outlined text-slate-400">settings</span>
+</button>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto px-6 pb-24">
+<!-- Profile Card -->
+<div class="bg-slate-900 rounded-lg p-6 shadow-xl border border-slate-800 flex flex-col items-center mb-6">
+<div class="relative mb-4">
+<div class="w-24 h-24 rounded-full border-4 border-primary/20 overflow-hidden bg-slate-800">
+<img class="w-full h-full object-cover" data-alt="Portrait of a smiling young man with a beard" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlUEImfFC5cMJW62Z4x7PgDB5bc4jD-nXHL5a-aqFfi03qHYMPT0L-9Fui3-Bqe-iSF5tKAvBB3gXqB8LJdr3DEawdJgKvyD28NFzCZb6coedop2Qd5qrQQMedYirkFQNEkje5kjhTIbtKpFV95yiDgmG-EYiCM7HYQNF5sgdFM1VkQAajchiTrZDvFL6gLYhXn63Ijo1l0MTSNuIoSDGiI_JyRRMc7yLtIsRqDEwyjANc_ikZ6aihON4ONNUD-COykOniu8zrFWw"/>
+</div>
+<div class="absolute -bottom-2 right-0 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full border-2 border-slate-900">PRO</div>
+</div>
+<h2 class="text-xl font-bold mb-1">Bonjour, Alex</h2>
+<div class="flex items-center gap-2 bg-primary/20 text-primary px-3 py-1 rounded-full mb-2 border border-primary/30">
+<span class="material-symbols-outlined text-sm">verified</span>
+<span class="text-xs font-bold uppercase tracking-wider">Le Toiletteur</span>
+</div>
+<p class="text-slate-500 text-xs">Membre depuis Janvier 2023</p>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="bg-slate-900 rounded-lg p-5 shadow-xl border border-slate-800">
+<div class="text-primary mb-2">
+<span class="material-symbols-outlined">stars</span>
+</div>
+<p class="text-2xl font-800 text-white">42</p>
+<p class="text-slate-500 text-xs font-medium">Points XP</p>
+</div>
+<div class="bg-slate-900 rounded-lg p-5 shadow-xl border border-slate-800">
+<div class="text-rose-500 mb-2">
+<span class="material-symbols-outlined">report</span>
+</div>
+<p class="text-2xl font-800 text-white">12</p>
+<p class="text-slate-500 text-xs font-medium">Signalements</p>
+</div>
+</div>
+<!-- Settings List -->
+<div class="space-y-2">
+<h3 class="text-sm font-bold text-slate-600 uppercase tracking-widest px-1 mb-4">Compte</h3>
+<div class="bg-slate-900 rounded-lg border border-slate-800 overflow-hidden">
+<button class="w-full flex items-center justify-between p-4 hover:bg-slate-800/50 transition-colors text-left">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500">person</span>
+<span class="font-semibold text-sm">Paramètres du compte</span>
+</div>
+<span class="material-symbols-outlined text-slate-700">chevron_right</span>
+</button>
+<div class="h-[1px] bg-slate-800 mx-4"></div>
+<button class="w-full flex items-center justify-between p-4 hover:bg-slate-800/50 transition-colors text-left">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">dark_mode</span>
+<span class="font-semibold text-sm">Mode Sombre</span>
+</div>
+<div class="w-10 h-6 bg-primary rounded-full relative">
+<div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div>
+</div>
+</button>
+<div class="h-[1px] bg-slate-800 mx-4"></div>
+<button class="w-full flex items-center justify-between p-4 hover:bg-slate-800/50 transition-colors text-left">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500">info</span>
+<span class="font-semibold text-sm">Crédits</span>
+</div>
+<span class="material-symbols-outlined text-slate-700">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom NavBar -->
+<div class="absolute bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 px-6 py-4 flex justify-between items-center rounded-t-lg">
+<a class="flex flex-col items-center gap-1 text-slate-600" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="text-[10px] font-bold">Map</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-600" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span class="text-[10px] font-bold">Favorites</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined active-icon">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+</a>
+</div>
+</div>
+</body></html>
